@@ -15,6 +15,9 @@ namespace WebApi
                 //.ForOrigins(ConfigurationManager.AppSettings["CORS_ORIGINS"].Split(';'))
                 //.AllowAllRequestHeaders()
                 //.AllowMethods("GET", "POST");
+
+            var corsHandler = new CorsMessageHandler(corsConfig, httpConfig);
+            httpConfig.MessageHandlers.Add(corsHandler);
         }
     }
 }
