@@ -81,14 +81,13 @@ Base URL: <input type="url" id="baseUrl" style="width:300px;" />
                 type: "POST",
                 contentType : "application/json",
                 data : JSON.stringify({ name: "Mary Adams" }),
-                /*beforeSend: function (request) {
+                beforeSend: function (request) {
                     if (id_token) request.setRequestHeader("Authorization", "Bearer " + id_token[1]);
-                },*/
+                },
                 success: function (data, status, jqHXR) {
                     $('#customers').text(JSON.stringify(data));
                 },
                 error: function (resp) {
-                    alert(JSON.stringify(resp));
                     if (resp.status == 401) {
                         $('#customers').text('Unauthorized');
                     } else {
