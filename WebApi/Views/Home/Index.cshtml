@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My single page app</title>
+</head>
+<body>
+
+    <h2>My single page app</h2>
+
+<script src="https://sdk.auth0.com/auth0.js#client=@System.Configuration.ConfigurationManager.AppSettings["AUTH0_CLIENT_ID"]&amp;scope=openid&amp;response_type=token"></script>
+<button onclick="window.Auth0.signIn({onestep: true})">Login</button>
+
+<br />
+<button id="get-customers">Get Customers</button>
+
+<br />
+<button id="add-customer">Add Customer</button>
+
+<h3>Customers</h3>
+<pre><code id="customers">Not logged in yet</code></pre>
+
+<h3>User Info</h3>
+<pre><code id="userinfo">Not logged in yet</code></pre>
+
+<script src="~/Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var access_token = /access_token=([^&]*)/g.exec(window.location.hash);
+        if (access_token) {
+            $.ajax({
+                url: 'https://api.auth0.com/userinfo?access_token=' + access_token[1],
+                dataType: 'json',
+                success: function (data, status, jqHXR) {
+                    $('#userinfo').text(JSON.stringify(data, 0, 2));
+                },
+                error: function (resp) {
+                    if (resp.status == 401) {
+                        $('#userinfo').text('Unauthorized');
+                    } else {
+                        $('#userinfo').text('Error');
+                    }
+
+                }
+            });
+        }
+
+        var baseUrl = 'http://webapi-cors-sample.apphb.com';
+        var id_token = /id_token=([^&]*)/g.exec(window.location.hash);
+        $('#get-customers').on('click', function () {
+            $.ajax({
+                url: baseUrl + '/api/customers',
+                dataType: 'json',
+                beforeSend: function (request) {
+                    if (id_token) request.setRequestHeader("Authorization", "Bearer " + id_token[1]);
+                },
+                success: function (data, status, jqHXR) {
+                    $('#customers').text(JSON.stringify(data));
+                },
+                error: function (resp) {
+                    if (resp.status == 401) {
+                        $('#customers').text('Unauthorized');
+                    } else {
+                        $('#customers').text('Error');
+                    }
+                }
+            });
+        });
+
+        $('#add-customer').on('click', function () {
+            $.ajax({
+                url: baseUrl + '/api/customers',
+                type: "POST",
+                contentType : "application/json",
+                data : JSON.stringify({ name: "Mary Adams" }),
+                /*beforeSend: function (request) {
+                    if (id_token) request.setRequestHeader("Authorization", "Bearer " + id_token[1]);
+                },*/
+                success: function (data, status, jqHXR) {
+                    $('#customers').text(JSON.stringify(data));
+                },
+                error: function (resp) {
+                    alert(JSON.stringify(resp));
+                    if (resp.status == 401) {
+                        $('#customers').text('Unauthorized');
+                    } else {
+                        $('#customers').text('Error');
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
