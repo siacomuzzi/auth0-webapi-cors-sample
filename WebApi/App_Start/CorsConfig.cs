@@ -10,7 +10,7 @@ namespace WebApi
         {
             var corsConfig = new WebApiCorsConfiguration();
             corsConfig.RegisterGlobal(httpConfig);
-            corsConfig.AllowAll();
+            corsConfig.ForAll().AllowAll();
                 //.ForResources(ConfigurationManager.AppSettings["CORS_RESOURCES"].Split(';'))
                 //.ForOrigins(ConfigurationManager.AppSettings["CORS_ORIGINS"].Split(';'))
                 //.AllowAllRequestHeaders()
