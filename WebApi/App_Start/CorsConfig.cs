@@ -10,14 +10,11 @@ namespace WebApi
         {
             var corsConfig = new WebApiCorsConfiguration();
             corsConfig.RegisterGlobal(httpConfig);
-            corsConfig.ForAll().AllowAll();
+            corsConfig.AllowAll();
                 //.ForResources(ConfigurationManager.AppSettings["CORS_RESOURCES"].Split(';'))
                 //.ForOrigins(ConfigurationManager.AppSettings["CORS_ORIGINS"].Split(';'))
                 //.AllowAllRequestHeaders()
                 //.AllowMethods("GET", "POST");
-
-            var corsHandler = new CorsMessageHandler(corsConfig, httpConfig);
-            httpConfig.MessageHandlers.Add(corsHandler);
         }
     }
 }
