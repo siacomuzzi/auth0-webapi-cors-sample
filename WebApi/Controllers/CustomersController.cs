@@ -21,14 +21,14 @@ namespace WebApi.Controllers
         };
 
         // GET api/customers
-        //[Authorize]
+        [Authorize]
         public IEnumerable<Customer> Get()
         {
             return customers.ToArray();
         }
 
         // POST api/customers
-        //[Authorize]
+        [Authorize]
         public Customer Post(Customer name)
         {
             customers.Add(name);
